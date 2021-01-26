@@ -1,4 +1,4 @@
-## Grouping of words following a regex pattern (unlike chinking, which is removing)
+## Removal of something (chink something from a chunk)
 import nltk
 import ssl
 from nltk.corpus import state_union
@@ -17,9 +17,8 @@ def process_content():
             words = nltk.word_tokenize(tokenized[0]) # split to array of words
             tagged = nltk.pos_tag(words) # tagging each word in the array (each element is a tuple of word and tagged value)
             
-            ## We are trying to find chunk of words that follows the below regex pattern
-            chunkGram = r"""Chunk: {<RB.?>*<VB.?>*<NNP>+<NN>?} """ # RB is adverb tag
-            # any form of adverb (RB.?) and we're looking for 0 or more of these (*)
+            chunkGram = r"""Chunk: {<.*>+} 
+                                    }<VB.?|IN|DT|TO>{""" # Chink will be in between "}{"
 
             chunkParser = nltk.RegexpParser(chunkGram)
             chunked = chunkParser.parse(tagged)
