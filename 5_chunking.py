@@ -1,5 +1,3 @@
-### Tagging each word in a sentence with the part of speech for that word (i.e noun, adj, verb, etc)
-
 import nltk
 import ssl
 from nltk.corpus import state_union
@@ -14,10 +12,19 @@ tokenized = custom_sent_tokenizer.tokenize(sample_text) # split to sentences
 
 def process_content():
     try:
-        for i in tokenized: # for each sentence
-            words = nltk.word_tokenize(tokenized[i]) # split to array of words
+        # for i in tokenized: # for each sentence
+            words = nltk.word_tokenize(tokenized[0]) # split to array of words
             tagged = nltk.pos_tag(words) # tagging each word in the array (each element is a tuple of word and tagged value)
-            print(tagged)
+            
+            ## We are trying to find chunk of words that follows the below regex pattern
+            chunkGram = r"""Chunk: {<RB.?>*<VB.?>*<NNP>+<NN>?} """ # RB is adverb tag
+            # any form of adverb (RB.?) and we're looking for 0 or more of these (*)
+
+            chunkParser = nltk.RegexpParser(chunkGram)
+            chunked = chunkParser.parse(tagged)
+
+            chunked.draw()
+            # print(chunked)
     except Exception as e:
         print(e)
 
